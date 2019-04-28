@@ -1,0 +1,23 @@
+class Solution {
+public:
+    bool judge(vector<int>& A, int partSum, int& cur){
+        int sum = 0;
+        while(cur != A.size()-1){
+            sum += A[cur++];
+            if(sum == partSum)return true;
+        }
+        return false;
+    }
+    bool canThreePartsEqualSum(vector<int>& A) {
+        int sum = 0;
+        for(int i = 0; i < A.size(); ++i){
+            sum += A[i];
+        }
+        if(sum % 3 != 0)return false;
+        int partSum = sum / 3;
+        int cur = 0;
+        if(!judge(A, partSum, cur))return false;
+        if(!judge(A, partSum, cur))return false;
+        return true;
+    }
+};
