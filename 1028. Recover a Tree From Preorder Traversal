@@ -1,0 +1,66 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int find(string S, int len, int i){
+        for(; i < S.size();){
+            if(S[i] != '-'){
+                i++;
+                continue;
+            }
+            for(int j = i; j < S.size(); j++){
+                if(S[j] != '-'){
+                    if(j - i == len)return i;
+                    else{
+                        i = j;
+                        break;
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+    TreeNode* build(string S, int depth){
+        //cout<<S<<endl;
+        //cout<<stoi(S.substr(0, S.find(string(depth, '-'))))<<endl;
+        TreeNode* x;
+        //search "---...---" and return the index of the first "---...---"
+        //if returned value is -1, it means there doesn't exist a "---...---" in S.
+        int pos1 = find(S, depth, 0);
+        //if there doesn't exist a "---...---" in S.
+        if(pos1 == -1){
+            x = new TreeNode(stoi(S));
+        //if there exists a "---...---" in S.
+        }else{
+            x = new TreeNode(stoi(S.substr(0, pos1)));
+            int pos2 = find(S, depth, pos1+1);
+            //if there is only a "---...---" in S.
+            if(pos2 == -1){
+                x->left = build(S.substr(pos1 + depth), depth + 1);
+            //if there are exactly two "---...---" in S.
+            }else{
+                x->left = build(S.substr(pos1 + depth, pos2 - pos1 - depth), depth + 1);
+                x->right = build(S.substr(pos2 + depth), depth + 1);
+            }
+        }
+        return x;
+    }
+    TreeNode* recoverFromPreorder(string S) {
+        return build(S, 1);
+    }
+    void preOrder(TreeNode* root, int depth){
+        if(root){
+            cout<<string(depth, '-');
+            cout<<root->val;
+            preOrder(root->left, depth + 1);
+            preOrder(root->right, depth + 1);
+        }
+    }
+};
