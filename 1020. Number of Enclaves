@@ -1,0 +1,73 @@
+//Using BFS or DFS to solve this problem.Nothing is worthy to say.
+class Solution {
+public:
+    bool isInBound(int rows, int cols, int i, int j){
+        return i >= 0 && i < rows && j >= 0 && j < cols;
+    }
+    int numEnclaves(vector<vector<int>>& A) {
+        vector<vector<bool>> isVisited(A.size(), vector<bool>(A[0].size(), false));
+        int ans = 0;
+        int rows = (int)A.size();
+        if(rows == 0)return 0;
+        int cols = (int)A[0].size();
+        if(cols == 0)return 0;
+        queue<pair<int,int>> que;
+        for(int i = 0; i < rows; i++){
+            if(A[i][0] == 1 && !isVisited[i][0]){
+                que.push(make_pair(i, 0));
+                isVisited[i][0] = true;
+            }
+            
+            if(A[i][cols-1] == 1 && !isVisited[i][cols-1]){
+                que.push(make_pair(i, cols-1));
+                isVisited[i][cols-1] = true;
+            }
+            
+        }
+        for(int j = 0; j < cols; j++){
+            if(A[0][j] == 1 && !isVisited[0][j]){
+                que.push(make_pair(0, j));
+                isVisited[0][j] = true;
+            }
+            
+            if(A[rows-1][j] == 1 && !isVisited[rows-1][j]){
+                que.push(make_pair(rows-1, j));
+                isVisited[rows-1][j] = true;
+            }
+            
+        }
+        while(!que.empty()){
+            pair<int,int> cur = que.front();
+            que.pop();
+            isVisited[cur.first][cur.second] = true;
+            if(cur.first - 1>=0 && !isVisited[cur.first-1][cur.second] && A[cur.first-1][cur.second] == 1){
+                que.push(make_pair(cur.first-1,cur.second));
+                isVisited[cur.first-1][cur.second] = true;
+            }
+            
+            if(cur.first + 1<rows && !isVisited[cur.first+1][cur.second] && A[cur.first+1][cur.second] == 1){
+                que.push(make_pair(cur.first+1, cur.second));
+                isVisited[cur.first+1][cur.second] = true;
+            }
+            
+            if(cur.second - 1>=0 && !isVisited[cur.first][cur.second-1] && A[cur.first][cur.second-1] == 1){
+                que.push(make_pair(cur.first,cur.second-1));
+                isVisited[cur.first][cur.second-1] = true;
+            }
+            
+            if(cur.second + 1<cols && !isVisited[cur.first][cur.second+1] && A[cur.first][cur.second+1] == 1){
+                que.push(make_pair(cur.first, cur.second+1));
+                isVisited[cur.first][cur.second+1] = true;
+            }
+            
+            }
+        for(int i = 0; i < rows; i++){
+            for(int j = 0; j < cols; j++){
+                if(A[i][j] == 1 && !isVisited[i][j])ans++;
+            }
+        }
+        return ans;
+    }
+};
+
+
