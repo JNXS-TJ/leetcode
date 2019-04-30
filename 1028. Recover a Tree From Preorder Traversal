@@ -7,6 +7,7 @@
  *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
  * };
  */
+
 class Solution {
 public:
     int find(string S, int len, int i){
@@ -33,18 +34,18 @@ public:
         TreeNode* x;
         //search "---...---" and return the index of the first "---...---"
         //if returned value is -1, it means there doesn't exist a "---...---" in S.
-        int pos1 = find(S, depth, 0);
+        string::size_type pos1 = find(S, depth, 0);
         //if there doesn't exist a "---...---" in S.
-        if(pos1 == -1){
+        if(pos1 == string::npos){
             x = new TreeNode(stoi(S));
-        //if there exists a "---...---" in S.
+            //if there exists a "---...---" in S.
         }else{
             x = new TreeNode(stoi(S.substr(0, pos1)));
-            int pos2 = find(S, depth, pos1+1);
+            string::size_type pos2 = find(S, depth, pos1 + 1);
             //if there is only a "---...---" in S.
-            if(pos2 == -1){
+            if(pos2 == string::npos){
                 x->left = build(S.substr(pos1 + depth), depth + 1);
-            //if there are exactly two "---...---" in S.
+                //if there are exactly two "---...---" in S.
             }else{
                 x->left = build(S.substr(pos1 + depth, pos2 - pos1 - depth), depth + 1);
                 x->right = build(S.substr(pos2 + depth), depth + 1);
