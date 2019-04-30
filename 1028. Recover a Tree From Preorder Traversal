@@ -31,27 +31,27 @@ public:
     TreeNode* build(string S, int depth){
         //cout<<S<<endl;
         //cout<<stoi(S.substr(0, S.find(string(depth, '-'))))<<endl;
-        TreeNode* x;
+        TreeNode* root;
         //search "---...---" and return the index of the first "---...---"
         //if returned value is -1, it means there doesn't exist a "---...---" in S.
         string::size_type pos1 = find(S, depth, 0);
         //if there doesn't exist a "---...---" in S.
         if(pos1 == string::npos){
-            x = new TreeNode(stoi(S));
+            root = new TreeNode(stoi(S));
             //if there exists a "---...---" in S.
         }else{
-            x = new TreeNode(stoi(S.substr(0, pos1)));
+            root = new TreeNode(stoi(S.substr(0, pos1)));
             string::size_type pos2 = find(S, depth, pos1 + 1);
             //if there is only a "---...---" in S.
             if(pos2 == string::npos){
-                x->left = build(S.substr(pos1 + depth), depth + 1);
+                root->left = build(S.substr(pos1 + depth), depth + 1);
                 //if there are exactly two "---...---" in S.
             }else{
-                x->left = build(S.substr(pos1 + depth, pos2 - pos1 - depth), depth + 1);
-                x->right = build(S.substr(pos2 + depth), depth + 1);
+                root->left = build(S.substr(pos1 + depth, pos2 - pos1 - depth), depth + 1);
+                root->right = build(S.substr(pos2 + depth), depth + 1);
             }
         }
-        return x;
+        return root;
     }
     TreeNode* recoverFromPreorder(string S) {
         return build(S, 1);
