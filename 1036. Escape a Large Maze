@@ -1,0 +1,33 @@
+class Solution {
+public:
+    static const int len = 19900;
+    static const int bound = 1000000;
+    bool judge(set<pair<int,int>>& blocked, vector<int>& source){
+        set<pair<int, int>> isvisited;
+        int count = 0;
+        queue<pair<int, int>> que;
+        que.push(make_pair(source[0], source[1]));
+        while(!que.empty()){
+            pair<int, int> cur = que.front();
+            que.pop();
+            isvisited.insert(cur);
+            vector<pair<int,int>> next = {make_pair(cur.first-1, cur.second), make_pair(cur.first+1, cur.second), make_pair(cur.first, cur.second-1), make_pair(cur.first, cur.second+1)};
+            for(auto tmp: next){
+                if(tmp.first >= 0 && tmp.first < bound && tmp.second >= 0 && tmp.second < bound && isvisited.find(tmp) == isvisited.end() && blocked.find(tmp) == blocked.end()){
+                    que.push(tmp);
+                    isvisited.insert(tmp);
+                }
+            }
+            if(++count >= len)return true;
+        }
+        return false;
+    }
+    bool isEscapePossible(vector<vector<int>>& blocked, vector<int>& source, vector<int>& target) {
+        set<pair<int,int>> blockedgrid;
+        for(auto vec: blocked)blockedgrid.insert(make_pair(vec[0], vec[1]));
+        bool flag1 = judge(blockedgrid, source);
+        bool flag2 = judge(blockedgrid, target);
+        if((flag1 == true && flag2 == false) || (flag1 == false && flag2 == true))return true;
+        else return false;
+    }
+};
